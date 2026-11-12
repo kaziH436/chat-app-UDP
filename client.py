@@ -10,7 +10,7 @@ def main():
     serverAddr = ('localhost', PORT)
     user_input=input('''What's your username?''')
     user_name=user_input
-    msg=user_input+' has joined the chat'
+    msg='join '+user_input
     sock.sendto(msg.encode(), serverAddr)
 
     while True:

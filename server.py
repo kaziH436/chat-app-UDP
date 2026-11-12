@@ -11,33 +11,45 @@ def udp_server():
 
     # The server must also keep track of the online clients as they join and leave the chat session
     clients={}
-    
+
     while True:
         msg, clientAddr=sock.recvfrom(BUFFER_SIZE)
         msg=msg.decode()
 
+        sender=None
+        for name in clients:
+            if clients[name]==clientAddr:
+                sender=name
+            
+        if msg.startswith('join '):
+            clients[msg.split()[1]]=clientAddr
+
         elif msg=='users':
-            message='Online users: '.join(clients)
+            message='Online users: '+', '.join(clients)
             sock.sendto(message.encode(),clientAddr)
 
         elif msg.startswith('to '):
+            friends=msg.split(' msg ')[0].split()[1:]
+            message=msg.split(' msg ')[1]
 
-            if names[i] is not same as names[i] and online:
-                socket.sendto(msg)
-            for name in recipients: 
-                if name == sender:  
-                    continue # ignore sender
-                if name in clients:  
-                    out = sender + ': ' + text  # edited
-                    sock.sendto(out.encode(), clients[name])  # edited
-                else:
-                    err = 'Error message: <' + name + ' is not online!>'  
-                    sock.sendto(err.encode(), clientAddr)  
+            if friends==['all']:
+                for client in clients:
+                    friends=[]
+                    if client!=sender:
+                        friends.append(client)
+
+            for name in friends: 
+                if name != sender:  
+                    if name in clients:  
+                        sock.sendto(message.encode(), clients[name])  
+                    else:
+                        err = 'Error message: <' + name + ' is not online!>'  
+                        sock.sendto(err.encode(), clientAddr)  
         
         elif msg=='leave':
             if sender in clients:
                 del clients[sender]
 
     sock.close()
-if ___name__ == "___main__":
+if __name__ == "__main__":
     udp_server()
