@@ -52,7 +52,7 @@ def udp_server():
         
         elif msg=='leave':
             if sender in clients:
-                print(sender+' has left the chat')
+                print(sender+' left the chat')
                 del clients[sender]
 
     sock.close()
