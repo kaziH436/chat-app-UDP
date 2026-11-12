@@ -22,7 +22,9 @@ def udp_server():
                 sender=name
             
         if msg.startswith('join '):
-            clients[msg.split()[1]]=clientAddr
+            user_name=msg.split()[1]
+            clients[user_name]=clientAddr
+            print(user_name+' joined the chat')
 
         elif msg=='users':
             message='Online users: '+', '.join(clients)
@@ -33,21 +35,24 @@ def udp_server():
             message=msg.split(' msg ')[1]
 
             if friends==['all']:
+                friends=[]
                 for client in clients:
-                    friends=[]
                     if client!=sender:
                         friends.append(client)
 
             for name in friends: 
-                if name != sender:  
-                    if name in clients:  
-                        sock.sendto(message.encode(), clients[name])  
+                if name != sender:
+                    response=''  
+                    if name in clients: 
+                        response+=sender+' says: <'+message+'>'
+                        sock.sendto(response.encode(), clients[name])  
                     else:
                         err = 'Error message: <' + name + ' is not online!>'  
                         sock.sendto(err.encode(), clientAddr)  
         
         elif msg=='leave':
             if sender in clients:
+                print(sender+' has left the chat')
                 del clients[sender]
 
     sock.close()

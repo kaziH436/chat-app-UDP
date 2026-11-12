@@ -8,7 +8,7 @@ BUFFER_SIZE = 65507
 def main():
     sock = socket(AF_INET, SOCK_DGRAM)  
     serverAddr = ('localhost', PORT)
-    user_input=input('''What's your username?''')
+    user_input=input('''What's your username? ''')
     user_name=user_input
     msg='join '+user_input
     sock.sendto(msg.encode(), serverAddr)
@@ -30,9 +30,10 @@ def main():
                     sock.sendto(user_input.encode(),serverAddr)
 
                 elif user_input=='leave':
+                    print('---> Bye...')
                     sock.sendto('leave'.encode(), serverAddr)  
                     sock.close()  
-                    return  # ?
+                    return 
 
 if __name__ == "__main__":
     main()
